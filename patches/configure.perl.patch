@@ -1,0 +1,95 @@
+--- configure.perl.bak	2010-11-10 03:14:23.000000000 +0900
++++ configure.perl	2013-07-23 16:28:58.000000000 +0900
+@@ -21,30 +21,22 @@
+ print "(just Return if you accept default)\n";
+ 
+ do{
+-    $MANROOT = "/usr/share/man/$LANG";
++    $MANROOT = "/usr/local/share/man/$LANG";
+     print "   Install directory   [$MANROOT] ?: ";
+-    $ans = <STDIN>; chomp $ans;
+-    if ($ans ne "") {$MANROOT = $ans;}
+ 
+     print "   compress manual with..\n";
+     for my $i (0 .. $#pack_method){
+ 	print "      $i: $pack_method[$i]\n";
+     }
+     print "   select [0..$#pack_method] : ";
+-    $ans = <STDIN>; chomp $ans;
++    $ans = 1;
+     if  ($ans eq "") {$ans = 0;}
+     if ($ans < 0 || $ans > $#pack_method) {$PACK = $pack_method[0]}
+     else {$PACK = $pack_method[$ans]}
+ 
+-    $OWNER = "root";
+-    print "   uname of page owner [$OWNER] ?: ";
+-    $ans = <STDIN>; chomp $ans;
+-    if ($ans ne "") {$OWNER = $ans;}
+-
+-    $GROUP = "root";
+-    print "   group of page owner [$GROUP] ?: ";
+-    $ans = <STDIN>; chomp $ans;
+-    if ($ans ne "") {$GROUP = $ans;}
++    $OWNER = getlogin;
++
++    $GROUP = "staff";
+ 
+     print "\n";
+     print "   Directory:    $MANROOT\n";
+@@ -53,7 +45,7 @@
+     print "\n";
+     do {
+ 	print "All OK? (Yes, [C]ontinue / No, [R]eselect) : ";
+-	$ans = <STDIN>; chomp $ans;
++	$ans = "y";
+     } until ($ans =~ /^[yYnNcCrR]/);
+ 
+ } until ($ans =~ /^[yYcC]/);
+@@ -93,14 +85,14 @@
+     for $i (0 .. $#pl){
+ 	my $qstr = ($main::pw{$pl[$i]} > -1) ? "[Y/n]" : "[y/N]";
+ 	printf "   [%2d/%2d] %-15s %s ?: ", $i, $#pl, $pl[$i], $qstr;
+-	$ans = <STDIN>; chomp $ans;
++	$ans = "y";
+ 	if ($ans =~ /[Yy].*/) { $main::pw{$pl[$i]} = $i;}
+ 	if ($ans =~ /[Nn].*/) { $main::pw{$pl[$i]} = -1;}
+     }
+ 
+     do {
+ 	print "All OK? (Yes, [C]ontinue / No, [R]eselect) : ";
+-	$ans = <STDIN>; chomp $ans;
++	$ans = "y";
+     } until ($ans =~ /[yYnNcCrR].*/);
+ 
+ } until ($ans =~ /^[yYcC]/);
+@@ -165,7 +157,7 @@
+ 	}
+ 	print "   Which to install? (0..$cf) : ";
+ 
+-	$ans = <STDIN>; chomp $ans;
++	$ans = 0;
+ 	if ($ans eq "") {$ans = 0};
+ 	if ($ans < 0 || $ans > $cf) { $ans = 0 };
+ 
+@@ -180,7 +172,7 @@
+ 
+     do {
+ 	print "All OK? (Yes, [C]ontinue / No, [R]eselect) : ";
+-	$ans = <STDIN>; chomp $ans;
++	$ans = "y";
+     } until ($ans =~ /^[yYnNcCrR]/);
+ 
+ } until ($ans =~ /^[yYcC]/);
+@@ -195,10 +187,10 @@
+ print ISS "#!/bin/sh\n";
+ 
+ print ISS "mkdir -p $MANROOT;";
+-print ISS "chown $OWNER.$GROUP $MANROOT\n";
++print ISS "chown $OWNER:$GROUP $MANROOT\n";
+ for $i (1..9){
+     print ISS "mkdir -p $MANROOT/man$i;";
+-    print ISS "chown $OWNER.$GROUP $MANROOT/man$i\n";
++    print ISS "chown $OWNER:$GROUP $MANROOT/man$i\n";
+ }
+ print ISS "\n";
+ 

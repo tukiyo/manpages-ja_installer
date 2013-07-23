@@ -1,0 +1,23 @@
+--- /etc/man.conf	2013-07-23 14:48:02.000000000 +0900
++++ man.conf	2013-07-23 14:47:55.000000000 +0900
+@@ -92,7 +92,8 @@
+ #
+ TROFF		/usr/bin/groff -Tps -mandoc -c
+ NROFF		/usr/bin/groff -Wall -mtty-char -Tascii -mandoc -c
+-JNROFF		/usr/bin/groff -Tnippon -mandocj -c
++#JNROFF		/usr/bin/groff -Tnippon -mandocj -c
++JNROFF /usr/local/bin/groff -Dutf8 -Tutf8 -mandoc -mja -E
+ EQN		/usr/bin/eqn -Tps
+ NEQN		/usr/bin/eqn -Tascii
+ JNEQN		/usr/bin/eqn -Tnippon
+@@ -102,8 +103,8 @@
+ PIC		/usr/bin/pic
+ VGRIND		/usr/bin/vgrind
+ GRAP		
+-PAGER		/usr/bin/less -is
+-BROWSER		/usr/bin/less -is
++PAGER		/usr/bin/less -isr
++BROWSER		/usr/bin/less -isr
+ HTMLPAGER	/bin/cat
+ CAT		/bin/cat
+ #
